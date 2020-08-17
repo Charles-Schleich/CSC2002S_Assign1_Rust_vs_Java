@@ -1,7 +1,9 @@
-# CS2002S 2020 Assignment 1
+# CS2002S 2020 Assignment 1 Rust vs Java
 
 Tutoring a student studying at the University Of Capetown
+
 Problem statement is inside `CSC2002S PCP1 Assignment.doc`
+
 Assignment concerns Java Fork-Join framework 
 
 
