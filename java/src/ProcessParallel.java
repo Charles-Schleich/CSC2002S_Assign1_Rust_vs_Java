@@ -43,10 +43,12 @@ public class ProcessParallel extends RecursiveTask<ArrayList<String>>  {
 			  ArrayList<String> rightAns = right.compute();
 			  ArrayList<String> leftAns  = left.join();
             
-
+              rightAns.addAll(leftAns);
 			  return rightAns;
 		  }
 	 }
+
+
 
 
 
@@ -66,6 +68,19 @@ public class ProcessParallel extends RecursiveTask<ArrayList<String>>  {
 
         for (int r = r_lo; r < r_hi; r++){
             for (int c = 1; c < width-1; c++){
+
+                // These ones are ones that are missing from the outfile 
+                // 1014 123
+                // 1022 124
+                // 859 467
+                // 649 507
+                // 752 308
+                // 589 262
+                // if (r ==1014 && c== 123){
+                //     is_basin_list(arr,r,c,width,true);
+                // }
+
+
                 if ( is_basin_list(arr,r,c,width,false) ){
                     String basin =  r+" "+c;
                     basin_list.add(basin);
@@ -97,9 +112,9 @@ public class ProcessParallel extends RecursiveTask<ArrayList<String>>  {
         double bot_l = arr[bot + c-1];
         double bot_r = arr[bot + c+1];
 
-        boolean cen_check = cen <= cen_l && cen <= cen_r;
-        boolean top_check = cen <= top_l && cen <= top_r && cen <= top_m;
-        boolean bot_check = cen <= bot_l && cen <= bot_r && cen <= bot_m;
+        boolean cen_check = cen < cen_l && cen < cen_r;
+        boolean top_check = cen < top_l && cen < top_r && cen < top_m;
+        boolean bot_check = cen < bot_l && cen < bot_r && cen < bot_m;
         
         if (print){
             System.out.println(top_l+" " + top_m + " " + top_r);

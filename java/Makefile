@@ -29,7 +29,7 @@ runseq:
 	@java -cp bin Sequential large_in.txt 
 
 runpar:
-	@java -cp bin Parallel  large_in.txt 
+	@java -cp bin Parallel  large_in.txt large_out.txt 
 
 run_sum:
 	@java -cp bin SumAll

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList; 
 import java.util.Scanner;
 import java.util.concurrent.ForkJoinPool;
-
+import java.util.Iterator; 
 
 public class Parallel{
     
@@ -45,8 +45,8 @@ public class Parallel{
 		// time = tock();
 		// System.out.println("Second run took "+ time +" seconds");
 
+        ArrayList<String> answer= new ArrayList<String>();
 
-        ArrayList<String> answer;
         double time ;
         double total =0;        
         int runs = 200;
@@ -57,13 +57,31 @@ public class Parallel{
             total=total+time;
             System.out.println("Run took "+ time +" seconds");
         }
-
         System.out.println("Average: "+ total/runs);
+        // System.out.println("Answer: "+ answer);
+        ArrayList<String> actual = read_in_answer_list(Args[1]);
+
+        compare(actual,answer); 
         System.out.println("Parallel End");
     }
 
 
+    public static void compare( ArrayList<String> actualAnswer, ArrayList<String> myAnswer ){
+        System.out.println("Compare ");
+        Iterator<String> iter  = myAnswer.iterator(); 
 
+        System.out.println("    actualAnswer " + actualAnswer.size() );
+        System.out.println("    myAnswer " + myAnswer.size() );
+
+        while (iter.hasNext()) { 
+            String elem = iter.next();
+            if (!actualAnswer.contains(elem)){
+                System.out.println(elem); 
+            }
+        } 
+
+
+    }
 
     static Tuple read_in_data_list(String input){
         String gridsize = new String("");
@@ -98,53 +116,42 @@ public class Parallel{
         return t;
     }
 
-    // Find Basin List 
-    // static void find_basin_list(double [] arr, int height, int width){
 
-    //     for (int r = 1; r < height-1; r++){
-    //         for (int c = 1; c < width-1; c++){
-                
-    //             if ( is_basin_list(arr,r,c,width,true) ){
-    //                 System.out.println(r+" "+c);
-    //             }
 
-    //         }
-    //     }
-    // }
+    static ArrayList<String> read_in_answer_list(String input){
+        String gridsize = new String("");
+        String values   = new String("");
+        String input_file = String.join("","./Data/",input);
+        ArrayList<String> list = new ArrayList<String>();
+        int index = 0;
 
-    // static boolean is_basin_list(double [] arr, int r, int c, int w, boolean print ){
-    //     // w*r + c
+        try (FileReader reader = new FileReader(input_file);
 
-    //     double cen   = arr[(r*w)+c] + 0.01;
-    //     double cen_l = arr[(r*w)+c-1];
-    //     double cen_r = arr[(r*w)+c+1];
+            BufferedReader br = new BufferedReader(reader) ){
+            gridsize = br.readLine();
+            Scanner sc = new Scanner(gridsize); 
+            int numberOfAnswers  = sc.nextInt();
 
-    //     int top = (r-1)*w;
-    //     double top_m = arr[top + c];
-    //     double top_l = arr[top + c-1];
-    //     double top_r = arr[top + c+1];
 
-    //     int bot = (r+1)*w;
-    //     double bot_m = arr[bot + c];
-    //     double bot_l = arr[bot + c-1];
-    //     double bot_r = arr[bot + c+1];
-
-    //     boolean cen_check = cen <= cen_l && cen <= cen_r;
-    //     boolean top_check = cen <= top_l && cen <= top_r && cen <= top_m;
-    //     boolean bot_check = cen <= bot_l && cen <= bot_r && cen <= bot_m;
+            String str = br.readLine();
+            while (str!=null){
+                list.add(str); 
+                index = index +1;
+                str = br.readLine();
+            }
+            br.close();
+            sc.close();
+        } catch(IOException e){
+            System.err.format("IOException: %s%n",e);
+            System.err.format("Exiting");
+            System.exit(1);
+        }
         
-    //     if (print){
-    //         System.out.println(top_l+" " + top_m + " " + top_r);
-    //         System.out.println(cen_l+" " + cen + " " + cen_r);
-    //         System.out.println(bot_l+" " + bot_m + " " + bot_r);
-    //         System.out.println("cen_check: " + cen_check + " "  + (cen < cen_l) + " " + (cen < cen_r));
-    //         System.out.println("cen_check: "+ cen +" "+ (cen_l) + " " + (cen_r)); 
-    //     }
-
-    //     if (cen_check && top_check && bot_check) {
-    //         return true;
-    //     } 
-    //     return false;
-    // }
-
+        // for(int i =0; i <list.size(); i ++){
+        //     System.out.println(list.get(i));
+        // }
+   
+        return list;
+    }
+  
 }
