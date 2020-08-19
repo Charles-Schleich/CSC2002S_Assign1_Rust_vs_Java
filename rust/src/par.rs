@@ -3,6 +3,9 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use std::fs::File;
 use std::time::{Duration, Instant};
+use std::thread;
+use std::sync::mpsc::*;
+use std::sync::mpsc;
 
 fn main() {
     // Read in data
@@ -37,6 +40,14 @@ fn main() {
     println!("Speedup :{:?} ", total_vec/total_slice );
 }
 
+//   _                        _   _____          _         
+//  | |                      | | |  __ \        | |        
+//  | |      ___    __ _   __| | | |  | |  __ _ | |_  __ _ 
+//  | |     / _ \  / _` | / _` | | |  | | / _` || __|/ _` |
+//  | |____| (_) || (_| || (_| | | |__| || (_| || |_| (_| |
+//  |______|\___/  \__,_| \__,_| |_____/  \__,_| \__|\__,_|
+                                                        
+                                                   
 
 fn read_in_file() -> std::io::Result<(u32,u32,Vec<f64>)> {
 
@@ -73,6 +84,49 @@ fn parse_u32(input: &str ) -> u32 {
 }
 
 
+
+fn threaded_vec(data:&Vec<f64>){
+    
+     let (tx,rx) = mpsc::channel();
+    //  let tx_listenner = mpsc::Sender::clone(&tx);
+    //  let tx_distribute = mpsc::Sender::clone(&tx);
+ 
+    let num_threads =10;
+    // let handlearr:Vec<JoinHandle<()>> = Vec::new();
+
+    for i in 1..num_threads{
+        let thread = thread::Builder::new().name("Listen".to_string()).spawn(move || thread(10,0,0,0,data, tx) );
+    }
+    //  let _ = thread::Builder::new().name("Dist".to_string()).spawn(move || distribute(args, dests_dist, config, t
+    //  x_distribute) );
+
+    let handle = thread::spawn(|| {
+            for i in 1..10 {
+                println!("hi number {} from the spawned thread!", i);
+                thread::sleep(Duration::from_millis(1));
+            }
+    });
+}
+
+
+
+
+fn thread(threadnum:u8, r:u32, c:u32, w:u32, data:&Vec<f64>, tx: Sender<Vec<String>>){
+
+
+}
+
+
+
+
+//  __      __         
+//  \ \    / /         
+//   \ \  / /___   ___ 
+//    \ \/ // _ \ / __|
+//     \  /|  __/| (__ 
+//      \/  \___| \___|
+                    
+                   
 //  VEC
 fn findbasin(width:u32,height:u32,data:&Vec<f64>){
 
@@ -115,9 +169,17 @@ fn isbasin(r:u32,c:u32,w:u32,data:&Vec<f64>)-> bool{
 }
 
 
+
+//    _____  _  _            
+//   / ____|| |(_)           
+//  | (___  | | _   ___  ___ 
+//   \___ \ | || | / __|/ _ \
+//   ____) || || || (__|  __/
+//  |_____/ |_||_| \___|\___|
+                          
+
 //  SLICE
 fn findbasin_slice(width:u32,height:u32,data:&[f64]){
-
     for r in 1..height-1 {
         for c in 1..width-1 {
             if isbasin_slice(r,c,width,data){
@@ -126,6 +188,7 @@ fn findbasin_slice(width:u32,height:u32,data:&[f64]){
         }
     }
 }
+
 
 fn isbasin_slice(r:u32,c:u32,w:u32,data:&[f64])-> bool{
     

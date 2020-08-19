@@ -79,8 +79,6 @@ public class Parallel{
                 System.out.println(elem); 
             }
         } 
-
-
     }
 
     static Tuple read_in_data_list(String input){
