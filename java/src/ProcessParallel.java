@@ -10,7 +10,7 @@ public class ProcessParallel extends RecursiveTask<ArrayList<String>>  {
 	  int height;
 
 	  double[] arr;
-	  static final int SEQUENTIAL_CUTOFF=200;
+	  static final int SEQUENTIAL_CUTOFF = 256;
 
 	  int ans = 0; // result
 	    
@@ -50,41 +50,23 @@ public class ProcessParallel extends RecursiveTask<ArrayList<String>>  {
 
 
 
-
-
-
     static ArrayList<String> find_basin_list(double [] arr, int height, int width, int r_lo, int r_hi){
         ArrayList<String> basin_list = new ArrayList<String>();
 
-        // System.out.println("r_hi: "+r_hi+"   r_lo: " +r_lo);
         if (r_lo==0){
+            System.out.println("LO r_hi: "+r_hi+"   r_lo: " +r_lo);
             r_lo = 1;
         }
         if (r_hi==width){
+            System.out.println("HI r_hi: "+r_hi+"   r_lo: " +r_lo);
             r_hi = r_hi -1;
         }
 
-
-
         for (int r = r_lo; r < r_hi; r++){
             for (int c = 1; c < width-1; c++){
-
-                // These ones are ones that are missing from the outfile 
-                // 1014 123
-                // 1022 124
-                // 859 467
-                // 649 507
-                // 752 308
-                // 589 262
-                // if (r ==1014 && c== 123){
-                //     is_basin_list(arr,r,c,width,true);
-                // }
-
-
                 if ( is_basin_list(arr,r,c,width,false) ){
                     String basin =  r+" "+c;
                     basin_list.add(basin);
-
                 }
 
             }
@@ -112,9 +94,9 @@ public class ProcessParallel extends RecursiveTask<ArrayList<String>>  {
         double bot_l = arr[bot + c-1];
         double bot_r = arr[bot + c+1];
 
-        boolean cen_check = cen < cen_l && cen < cen_r;
-        boolean top_check = cen < top_l && cen < top_r && cen < top_m;
-        boolean bot_check = cen < bot_l && cen < bot_r && cen < bot_m;
+        boolean cen_check = cen <= cen_l && cen <= cen_r;
+        boolean top_check = cen <= top_l && cen <= top_r && cen <= top_m;
+        boolean bot_check = cen <= bot_l && cen <= bot_r && cen <= bot_m;
         
         if (print){
             System.out.println(top_l+" " + top_m + " " + top_r);

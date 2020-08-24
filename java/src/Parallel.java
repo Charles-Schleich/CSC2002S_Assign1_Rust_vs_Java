@@ -21,7 +21,7 @@ public class Parallel{
 	static final ForkJoinPool fjPool = new ForkJoinPool();
 	
 	static ArrayList<String> find(double[] arr, int width, int height){
-        return fjPool.invoke(new ProcessParallel(arr, width, height, 0, width));
+        return fjPool.invoke(new ProcessParallel(arr, height, width, 0, width));
 	}
 
 
@@ -49,7 +49,7 @@ public class Parallel{
 
         double time ;
         double total =0;        
-        int runs = 200;
+        int runs = 1;
         for(int run = 0; run<runs; run++ ){
             tick();
             answer = find( t.list, t.height,t.width);
@@ -80,6 +80,7 @@ public class Parallel{
             }
         } 
     }
+
 
     static Tuple read_in_data_list(String input){
         String gridsize = new String("");

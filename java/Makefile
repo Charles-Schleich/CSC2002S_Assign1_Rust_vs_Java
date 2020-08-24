@@ -22,8 +22,9 @@ default: $(CLASS_FILES)
 
 clean:
 	rm $(BINDIR)/*.class
-run:
-	@java -cp bin SumAll 
+
+# run:
+# 	@java -cp bin SumAll 
 
 runseq:
 	@java -cp bin Sequential large_in.txt 

@@ -5,19 +5,19 @@ use std::fs::File;
 use std::time::{Duration, Instant};
 use std::thread;
 use std::sync::mpsc::*;
-use std::sync::mpsc;
+use std::thread::JoinHandle;
 
 fn main() {
     // Read in data
     let (width,height,data): (u32,u32,Vec<f64>) = read_in_file().unwrap();
     let data2 = data.clone();
 
-
+    // VEC
     let mut total_vec:f64 = 0.0; 
     let runs = 200;
     for _ in 0..runs {
         let now = Instant::now();
-        findbasin(width,height,&data);
+        compute_threaded_vec(width,height,&data);
         let new_now = Instant::now();
         let time = new_now.duration_since(now).as_secs_f64();
         total_vec= total_vec+time;
@@ -25,6 +25,7 @@ fn main() {
     println!("Average time Vec   :{:?} ", total_vec/(runs as f64));
 
 
+    // Slice
     let mut total_slice:f64 = 0.0; 
     let runs = 200;
     for _ in 0..runs {
@@ -85,37 +86,6 @@ fn parse_u32(input: &str ) -> u32 {
 
 
 
-fn threaded_vec(data:&Vec<f64>){
-    
-     let (tx,rx) = mpsc::channel();
-    //  let tx_listenner = mpsc::Sender::clone(&tx);
-    //  let tx_distribute = mpsc::Sender::clone(&tx);
- 
-    let num_threads =10;
-    // let handlearr:Vec<JoinHandle<()>> = Vec::new();
-
-    for i in 1..num_threads{
-        let thread = thread::Builder::new().name("Listen".to_string()).spawn(move || thread(10,0,0,0,data, tx) );
-    }
-    //  let _ = thread::Builder::new().name("Dist".to_string()).spawn(move || distribute(args, dests_dist, config, t
-    //  x_distribute) );
-
-    let handle = thread::spawn(|| {
-            for i in 1..10 {
-                println!("hi number {} from the spawned thread!", i);
-                thread::sleep(Duration::from_millis(1));
-            }
-    });
-}
-
-
-
-
-fn thread(threadnum:u8, r:u32, c:u32, w:u32, data:&Vec<f64>, tx: Sender<Vec<String>>){
-
-
-}
-
 
 
 
@@ -126,7 +96,34 @@ fn thread(threadnum:u8, r:u32, c:u32, w:u32, data:&Vec<f64>, tx: Sender<Vec<Stri
 //     \  /|  __/| (__ 
 //      \/  \___| \___|
                     
+fn compute_threaded_vec(width:u32,height:u32,data:&Vec<f64>){
+    
+    // let num_threads =10;
+    // let handlearr:Vec<JoinHandle<()>> = Vec::new();
+
+    // // for i in 1..num_threads{
+    // let thread_n = thread::Builder::new()
+    //                                                         .name("Listen".to_string())
+    //                                                         .spawn(move || vec_thread(1,0,0,0,data) );
+    // // }
+
+    // let handle = thread::spawn(|| {
+    //         for i in 1..10 {
+    //             println!("hi number {} from the spawned thread!", i);
+    //             thread::sleep(Duration::from_millis(1));
+    //         }
+    // });
+
+}
+
+fn vec_thread(threadnum:u8, r:u32, c:u32, w:u32, data:&'static std::vec::Vec<f64>) ->  Vec<String>{
+
+    return vec![String::new()];
+}
+
                    
+
+
 //  VEC
 fn findbasin(width:u32,height:u32,data:&Vec<f64>){
 
@@ -167,6 +164,8 @@ fn isbasin(r:u32,c:u32,w:u32,data:&Vec<f64>)-> bool{
     }
     return false;
 }
+
+
 
 
 

@@ -42,7 +42,7 @@ public class Sequential{
         ArrayList<String> answer;
         double time ;
         double total =0;
-        int runs = 200; 
+        int runs = 1; 
         for(int run = 0; run<runs ; run++ ){
             tick();
             answer = find_basin_list ( t.list, t.height,t.width);
@@ -57,7 +57,9 @@ public class Sequential{
         System.out.println("Sequential end");
     }
 
-                       
+
+
+
 //      /\                
 //     /  \    _ __  _ __ 
 //    / /\ \  | '__|| '__|
