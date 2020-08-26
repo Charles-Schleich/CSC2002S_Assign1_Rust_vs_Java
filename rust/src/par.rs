@@ -1,4 +1,4 @@
-
+#![allow(warnings)]
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::fs::File;
