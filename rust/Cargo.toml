@@ -12,6 +12,11 @@ name = "seq"
 path = "src/seq.rs"
 
 [[bin]]
+name = "seq2d"
+path = "src/seq2d.rs"
+
+
+[[bin]]
 name = "par"
 path = "src/par.rs"
 
