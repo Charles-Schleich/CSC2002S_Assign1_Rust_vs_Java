@@ -98,25 +98,25 @@ fn parse_u32(input: &str ) -> u32 {
                     
 fn compute_threaded_vec(width:u32,height:u32,data:&Vec<f64>){
     
-    // let num_threads =10;
-    // let handlearr:Vec<JoinHandle<()>> = Vec::new();
+    let num_threads =10;
+    let handlearr:Vec<JoinHandle<()>> = Vec::new();
 
-    // // for i in 1..num_threads{
-    // let thread_n = thread::Builder::new()
-    //                                                         .name("Listen".to_string())
-    //                                                         .spawn(move || vec_thread(1,0,0,0,data) );
-    // // }
+    // for i in 1..num_threads{
+    let thread_n = thread::Builder::new()
+                                                            .name("Listen".to_string())
+                                                            .spawn(move || vec_thread(1,0,0,0,*data) );
+    // }
 
-    // let handle = thread::spawn(|| {
-    //         for i in 1..10 {
-    //             println!("hi number {} from the spawned thread!", i);
-    //             thread::sleep(Duration::from_millis(1));
-    //         }
-    // });
+    let handle = thread::spawn(|| {
+            for i in 1..10 {
+                println!("hi number {} from the spawned thread!", i);
+                thread::sleep(Duration::from_millis(1));
+            }
+    });
 
 }
 
-fn vec_thread(threadnum:u8, r:u32, c:u32, w:u32, data:&'static std::vec::Vec<f64>) ->  Vec<String>{
+fn vec_thread(threadnum:u8, r:u32, c:u32, w:u32, data:Vec<f64>) ->  Vec<String>{
 
     return vec![String::new()];
 }

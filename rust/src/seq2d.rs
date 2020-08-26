@@ -220,6 +220,7 @@ fn is_basin_vec(r:usize, c:usize,w:usize,data:&Vec<Vec<f32>>)-> bool{
                           
 fn find_basin_slice(width:u32,height:u32,data:&[&[f32]]) -> Vec<String>{
   let mut answers = Vec::new();
+
     for r in 1..width-1 {
         for c in 1..height-1{
             if is_basin_slice(r as usize,c as usize,width as usize,data){
@@ -227,8 +228,6 @@ fn find_basin_slice(width:u32,height:u32,data:&[&[f32]]) -> Vec<String>{
             }
         }
     }
-    // println!("Answers Len {}", answers.len());
-    // println!("Answers  {:?}", answers);
     answers
 }
 

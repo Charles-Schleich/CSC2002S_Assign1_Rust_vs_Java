@@ -7,38 +7,44 @@ use std::time::{Duration, Instant};
 
 
 fn main() {
+    let file = String::from("./Data/large_in.txt");
+    let output = String::from("./Data/large_out.txt");
+
     // Read in data
-    let (width,height,data): (u32,u32,Vec<f32>) = read_in_input().unwrap();
+    let (width,height,data): (u32,u32,Vec<f32>) = read_in_input(file).unwrap();
     let data2 = data.clone();
 
     let mut total_vec:f32 = 0.0; 
     let runs = 100;
     
     println!("Running {} times ", runs );
-    let mut result: Vec<String> = Vec::new();
+    let mut result_vec: Vec<String> = Vec::new();
     for _ in 0..runs {
         let now = Instant::now();
-        result = find_basin_vec(width,height,&data);
-        let new_now = Instant::now();
-        let time = new_now.duration_since(now).as_secs_f32();
+        result_vec = find_basin_vec(width,height,&data);
+        let time = Instant::now().duration_since(now).as_secs_f32();
         total_vec= total_vec+time;
     }
 
 
     let mut total_slice:f32 = 0.0; 
+    let mut result_slice: Vec<String> = Vec::new();
     for _ in 0..runs {
         let slice = &data2[..];
         let now = Instant::now();
-        find_basin_slice(width,height,slice);
-        let new_now = Instant::now();
-        let time = new_now.duration_since(now).as_secs_f32();
+        result_slice = find_basin_slice(width,height,slice);
+        let time = Instant::now().duration_since(now).as_secs_f32();
         total_slice= total_slice+time;
     }
 
     println!("Results\n------");
-    let (expectedNumBasins, expectedBasins):(u32,Vec<String>) = read_in_output().unwrap();
+ 
+    let (expectedNumBasins, expectedBasins) : (u32,Vec<String>) = read_in_output(output).unwrap();
+    println!("Vec Expected Number {:?}, Actual {}", expectedNumBasins, result_vec.len());
+    validate_output(&expectedBasins,result_vec);
+    println!("Slice Expected Number {:?}, Actual {}", expectedNumBasins, result_slice.len());
+    validate_output(&expectedBasins,result_slice);
 
-    println!("Expected Number {:?}, Actual {}", expectedNumBasins, result.len());
     println!("Performance\n--------------", );
     println!("Average time Vec   :{:?} ", total_vec/(runs as f32));
     println!("Average time Slice :{:?} ", total_slice/(runs as f32));
@@ -47,9 +53,19 @@ fn main() {
 }
 
 
-fn read_in_input() -> std::io::Result<(u32,u32,Vec<f32>)> {
+//   _            _                         
+//  | |          | |                        
+//  | |__    ___ | | _ __    ___  _ __  ___ 
+//  | '_ \  / _ \| || '_ \  / _ \| '__|/ __|
+//  | | | ||  __/| || |_) ||  __/| |   \__ \
+//  |_| |_| \___||_|| .__/  \___||_|   |___/
+//                  | |                     
+//                  |_|         
 
-    let f = File::open("./Data/large_in.txt")?;
+
+fn read_in_input(file: String) -> std::io::Result<(u32,u32,Vec<f32>)> {
+
+    let f = File::open(file)?;
     let mut reader = BufReader::new(f);
 
     let mut line = String::new();
@@ -79,9 +95,9 @@ fn parse_u32(input: &str ) -> u32 {
     input.parse::<u32>().unwrap()
 }
 
-fn read_in_output() -> std::io::Result<(u32,Vec<String>)> {
+fn read_in_output(file:String) -> std::io::Result<(u32,Vec<String>)> {
 
-    let f = File::open("./Data/large_out.txt")?;
+    let f = File::open(file)?;
     let mut reader = BufReader::new(f);
 
     let mut line = String::new();
@@ -99,6 +115,26 @@ fn read_in_output() -> std::io::Result<(u32,Vec<String>)> {
     Ok((number_of_results,arr))
 }
 
+fn validate_output( expected:&Vec<String>, produced : Vec<String>){
+
+    let extra:Vec<String> = produced
+        .into_iter()
+        .filter_map(|x| {
+            if expected.contains(&x) {
+                None
+            } else{
+                Some(x)
+            }
+        })
+        .collect();
+
+    println!("  Valid output: {:?}",extra.is_empty());
+    if !extra.is_empty(){
+        println!("  {:?}",extra);
+    }
+}
+
+
 //  __      __         
 //  \ \    / /         
 //   \ \  / /___   ___ 
@@ -112,7 +148,7 @@ fn find_basin_vec(width:u32,height:u32,data:&Vec<f32>) -> Vec<String>{
     for r in 1..height-1 {
         for c in 1..width-1 {
             if is_basin_vec(r,c,width,&data){
-                let ans = format!("{}  {}",r,c);
+                let ans = format!("{} {}",r,c);
                 // result.append(String::from(ans));
                 result.push(ans);
             }
@@ -157,15 +193,18 @@ fn is_basin_vec(r:u32,c:u32,w:u32,data:&Vec<f32>)-> bool{
 //   ____) || || || (__|  __/
 //  |_____/ |_||_| \___|\___|
                           
-fn find_basin_slice(width:u32,height:u32,data:&[f32]){
+fn find_basin_slice(width:u32,height:u32,data:&[f32]) -> Vec<String>{
 
+  let mut answers = Vec::new();
     for r in 1..height-1 {
         for c in 1..width-1 {
             if is_basin_slice(r,c,width,data){
-                // println!("{}  {}",r,c);
+                answers.push(format!("{} {}",r,c));
             }
         }
     }
+    answers
+
 }
 
 fn is_basin_slice(r:u32,c:u32,w:u32,data:&[f32])-> bool{
