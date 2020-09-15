@@ -60,8 +60,6 @@ fn main() {
 }
 
 
-
-
 //   _            _                         
 //  | |          | |                        
 //  | |__    ___ | | _ __    ___  _ __  ___ 
@@ -136,8 +134,8 @@ fn read_in_output(file:String) -> std::io::Result<(u32,Vec<String>)> {
     Ok((number_of_results,arr))
 }
 
-fn validate_output( expected:&Vec<String>, produced : Vec<String>){
 
+fn validate_output( expected:&Vec<String>, produced : Vec<String>){
     let extra:Vec<String> = produced
         .into_iter()
         .filter_map(|x| {
@@ -169,41 +167,26 @@ fn find_basin_vec(width:u32,height:u32,data:&Vec<Vec<f32>>) -> Vec<String>{
             }
         }
     }
-    // println!("Answers Len {}", answers.len());
-    // println!("Answers  {:?}", answers);
     answers
 }
 
 fn is_basin_vec(r:usize, c:usize,w:usize,data:&Vec<Vec<f32>>)-> bool{
-    //  ["177 273", "195 343", "298 342"]
-    
- 
-    let top_l = *data.get(r-1).unwrap()
-                           .get(c-1).unwrap();
-    let top_m = *data.get(r-1).unwrap()
-                           .get(c).unwrap();
-    let top_r = *data.get(r-1).unwrap()
-                           .get(c+1).unwrap();
 
-    let cen_l = *data.get(r).unwrap()
-                          .get(c-1).unwrap();
-    let cen_cen = *data.get(r).unwrap()
-                            .get(c).unwrap() + 0.01 ;
-    let cen_r = *data.get(r).unwrap()
-                          .get(c+1).unwrap();
+    let cen_m:f32 = data[r][c] + 0.01;
+    let cen_l:f32 = data[r][c-1];
+    let cen_r:f32 = data[r][c+1];
 
+    let top_m:f32 = data[r-1][c];
+    let top_l:f32 = data[r-1][c-1];
+    let top_r:f32 = data[r-1][c+1];
 
-    let bot_l = *data.get(r+1).unwrap()
-                           .get(c-1).unwrap();
-    let bot_m = *data.get(r+1).unwrap()
-                           .get(c).unwrap();
-    let bot_r = *data.get(r+1).unwrap()
-                           .get(c+1).unwrap();
+    let bot_m:f32 = data[r+1][c];
+    let bot_l:f32 = data[r+1][c-1];
+    let bot_r:f32 = data[r+1][c+1];
 
-
-    let top_check = (cen_cen <= top_l) && (cen_cen <= top_r) && (cen_cen <= top_m);
-    let cen_check = (cen_cen <= cen_l) && (cen_cen <= cen_r);
-    let bot_check = (cen_cen <= bot_l) && (cen_cen <= bot_r) && (cen_cen <= bot_m);
+    let top_check = (cen_m <= top_l) && (cen_m <= top_r) && (cen_m <= top_m);
+    let cen_check = (cen_m <= cen_l) && (cen_m <= cen_r);
+    let bot_check = (cen_m <= bot_l) && (cen_m <= bot_r) && (cen_m <= bot_m);
 
     if cen_check && top_check && bot_check {
         return true;
@@ -234,33 +217,21 @@ fn find_basin_slice(width:u32,height:u32,data:&[&[f32]]) -> Vec<String>{
 
 fn is_basin_slice(r:usize, c:usize,w:usize,data:&[&[f32]])-> bool{
     
- 
-    let top_l = *data.get(r-1).unwrap()
-                           .get(c-1).unwrap();
-    let top_m = *data.get(r-1).unwrap()
-                           .get(c).unwrap();
-    let top_r = *data.get(r-1).unwrap()
-                           .get(c+1).unwrap();
+    let cen_m:f32 = data[r][c] + 0.01;
+    let cen_l:f32 = data[r][c-1];
+    let cen_r:f32 = data[r][c+1];
 
-    let cen_l = *data.get(r).unwrap()
-                          .get(c-1).unwrap();
-    let cen_cen = *data.get(r).unwrap()
-                            .get(c).unwrap() + 0.01 ;
-    let cen_r = *data.get(r).unwrap()
-                          .get(c+1).unwrap();
+    let top_m:f32 = data[r-1][c];
+    let top_l:f32 = data[r-1][c-1];
+    let top_r:f32 = data[r-1][c+1];
 
+    let bot_m:f32 = data[r+1][c];
+    let bot_l:f32 = data[r+1][c-1];
+    let bot_r:f32 = data[r+1][c+1];
 
-    let bot_l = *data.get(r+1).unwrap()
-                           .get(c-1).unwrap();
-    let bot_m = *data.get(r+1).unwrap()
-                           .get(c).unwrap();
-    let bot_r = *data.get(r+1).unwrap()
-                           .get(c+1).unwrap();
-
-
-    let top_check = (cen_cen <= top_l) && (cen_cen <= top_r) && (cen_cen <= top_m);
-    let cen_check = (cen_cen <= cen_l) && (cen_cen <= cen_r);
-    let bot_check = (cen_cen <= bot_l) && (cen_cen <= bot_r) && (cen_cen <= bot_m);
+    let top_check = (cen_m <= top_l) && (cen_m <= top_r) && (cen_m <= top_m);
+    let cen_check = (cen_m <= cen_l) && (cen_m <= cen_r);
+    let bot_check = (cen_m <= bot_l) && (cen_m <= bot_r) && (cen_m <= bot_m);
 
     if cen_check && top_check && bot_check {
         return true;

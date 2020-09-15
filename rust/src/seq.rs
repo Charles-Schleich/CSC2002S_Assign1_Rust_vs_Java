@@ -62,7 +62,6 @@ fn main() {
 //                  | |                     
 //                  |_|         
 
-
 fn read_in_input(file: String) -> std::io::Result<(u32,u32,Vec<f32>)> {
 
     let f = File::open(file)?;
@@ -159,21 +158,20 @@ fn find_basin_vec(width:u32,height:u32,data:&Vec<f32>) -> Vec<String>{
 
 fn is_basin_vec(r:u32,c:u32,w:u32,data:&Vec<f32>)-> bool{
     
-    let cen:u32 = r*w+c as u32;
-    let cen_cen = data.get(cen as usize).unwrap() + 0.01;
-    let cen_l = *data.get((cen-1) as usize).unwrap();
-    let cen_r = *data.get((cen+1) as usize).unwrap();
+    let cen:usize = (r*w+c) as usize;
+    let cen_cen = data[cen] + 0.01;
+    let cen_l =  data[(cen-1)];
+    let cen_r =  data[(cen+1)];
 
-    let top:u32 = ((r-1)*w +c) as u32;
-    let top_m = *data.get((top) as usize).unwrap();
-    let top_l = *data.get((top-1) as usize).unwrap();
-    let top_r = *data.get((top+1) as usize).unwrap();
+    let top:usize = ((r-1)*w +c) as usize;
+    let top_m =  data[(top)];
+    let top_l =  data[(top-1)];
+    let top_r =  data[(top+1)];
 
-    let bot:u64 = ((r+1)*w +c) as u64;
-    let bot_m = *data.get((bot) as usize).unwrap();
-    let bot_l = *data.get((bot-1) as usize).unwrap();
-    let bot_r = *data.get((bot+1) as usize).unwrap();
-
+    let bot:usize = ((r+1)*w +c) as usize;
+    let bot_m =  data[(bot)];
+    let bot_l =  data[(bot-1)];
+    let bot_r =  data[(bot+1)];
 
     let cen_check = cen_cen <= cen_l && cen_cen <= cen_r;
     let top_check = cen_cen <= top_l && cen_cen <= top_r && cen_cen <= top_m;
@@ -204,26 +202,27 @@ fn find_basin_slice(width:u32,height:u32,data:&[f32]) -> Vec<String>{
         }
     }
     answers
-
 }
 
 fn is_basin_slice(r:u32,c:u32,w:u32,data:&[f32])-> bool{
     
-    let cen:u32 = r*w+c as u32;
-    let cen_cen = data.get(cen as usize).unwrap() + 0.01;
-    let cen_l = *data.get((cen-1) as usize).unwrap();
-    let cen_r = *data.get((cen+1) as usize).unwrap();
+    // Note indexing directly into data[cen] is unsafe, 
+    // for critical projects rather use data.get(cen) and handle the Option<f32>
 
-    let top:u32 = ((r-1)*w +c) as u32;
-    let top_m = *data.get((top) as usize).unwrap();
-    let top_l = *data.get((top-1) as usize).unwrap();
-    let top_r = *data.get((top+1) as usize).unwrap();
+    let cen:usize = (r*w+c) as usize;
+    let cen_cen = data[cen] + 0.01;
+    let cen_l = data[cen-1];
+    let cen_r = data[cen+1];
 
-    let bot:u64 = ((r+1)*w +c) as u64;
-    let bot_m = *data.get((bot) as usize).unwrap();
-    let bot_l = *data.get((bot-1) as usize).unwrap();
-    let bot_r = *data.get((bot+1) as usize).unwrap();
+    let top:usize = ((r-1)*w +c) as usize;
+    let top_m = data[top];
+    let top_l = data[top-1];
+    let top_r = data[top+1];
 
+    let bot:usize = ((r+1)*w +c) as usize;
+    let bot_m = data[bot];
+    let bot_l = data[bot-1];
+    let bot_r = data[bot+1];
 
     let cen_check = cen_cen <= cen_l && cen_cen <= cen_r;
     let top_check = cen_cen <= top_l && cen_cen <= top_r && cen_cen <= top_m;

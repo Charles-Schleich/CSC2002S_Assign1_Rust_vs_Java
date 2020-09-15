@@ -6,7 +6,6 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-
 [[bin]]
 name = "seq"
 path = "src/seq.rs"
@@ -15,9 +14,11 @@ path = "src/seq.rs"
 name = "seq2d"
 path = "src/seq2d.rs"
 
-
 [[bin]]
 name = "par"
 path = "src/par.rs"
 
+
 [dependencies]
+rayon = "1.4.0"
+
